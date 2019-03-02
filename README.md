@@ -19,14 +19,16 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
        then you can type anoter command
        type `EXIT` to exit
 4. first example
+   ```
    ./app
    % wait %
    % when you see it asks you to type a command %:
-        `MS 05`      -> set speed = 5
-        `ID`         -> watch ID
-        `LR 02`      -> set laser rate = 2
-        `DS 10 1000` -> start scan with rotate step 10 degrees and 1000 points per plane
-        `EXIT`       -> exit
+        MS 05      -> set speed = 5
+        ID         -> watch ID
+        LR 02      -> set laser rate = 2
+        DS 10 1000 -> start scan with rotate step 10 degrees and 1000 points per plane
+        EXIT       -> exit
+   ```
 
 5. second example
     ./app DS_10_1000
