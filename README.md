@@ -19,7 +19,7 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
        then you can type anoter command
        type `EXIT` to exit
 4. first example
-   # ./app
+   ./app
    % wait %
    % when you see it asks you to type a command %:
         `MS 05`      -> set speed = 5
@@ -29,5 +29,5 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
         `EXIT`       -> exit
 
 5. second example
-    # ./app DS_10_1000
+    ./app DS_10_1000
     SWEEP will do same scan (see prev example) using it's setings from previous run
