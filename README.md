@@ -6,11 +6,13 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
 2. You're welcome to improve these src codes. This programm is writeen in a very frivolous style. I'll leave it as is :)
 3. How to use: there are two ways: you inline args or you do not
    args = commands as they're written in datasheet
+   
    3.1 You inline args
-       if you pass parameters when runnig this program, it will send it to `parse_and_send_command`
-       there these parameters will be parsed in natural order and sent to SWEEP
-       this mode was added to be able do this: `./%THIS_APP% DS_STEP_POINTS`
+       * if you pass parameters when runnig this program, it will send it to `parse_and_send_command`
+       * there these parameters will be parsed in natural order and sent to SWEEP
+       * this mode was added to be able do this: `./%THIS_APP% DS_STEP_POINTS`
            so that you can skip any i/o while programm runs and just set all args at the start
+           
    3.2 You do not inline args
    
        * you start this app
