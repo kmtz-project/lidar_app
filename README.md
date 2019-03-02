@@ -12,12 +12,12 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
        this mode was added to be able do this: `./%THIS_APP% DS_STEP_POINTS`
            so that you can skip any i/o while programm runs and just set all args at the start
    3.2 You do not inline args
-       you start this app
-       you read output and stick to do what it asks for
-       `enter a command` = type command as it's written in datasheet write to console
-       then this command will be send to SWEEP and it will execute it
-       then you can type anoter command
-       type `EXIT` to exit
+       * you start this app
+       * you read output and stick to do what it asks for
+       * `enter a command` = type command as it's written in datasheet write to console
+       * then this command will be send to SWEEP and it will execute it
+       * then you can type anoter command
+       * type `EXIT` to exit
 4. first example
    ```
    ./app
@@ -31,5 +31,7 @@ The program controls the motor installed on kmtz and collects data from Sweep v1
    ```
 
 5. second example
-    ./app DS_10_1000
-    SWEEP will do same scan (see prev example) using it's setings from previous run
+   ```
+   ./app DS_10_1000
+   SWEEP will do same scan (see prev example) using it's setings from previous run
+   ```
