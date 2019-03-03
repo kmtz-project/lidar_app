@@ -11,10 +11,13 @@
 #include <stdint.h>
 #include <math.h>
 
-#define INIT_TIME   3
+#define INIT_TIME   10
 
-#define PI 		  	3.1415
-#define PWM_CONST 	4.8333	// equal to 1 degree of servo's rotation
+#define LIDAR_APP "/media/scripts/step_motor.sh"
+
+#define PI              3.1415926
+#define ONE_DEG_STEP 	8.88	// equal to 1 degree of step motor rotation 
+                                // (mode: 1/16 step)
 
 int UART_init(int*);
 void send_command(char*, int);

@@ -5,7 +5,7 @@ int main(int argc, char** argv)
 	int fd=0;
 	UART_init(&fd);
 
-	char GPIO_init[] = "/media/scripts/gpio.sh 12";
+	char GPIO_init[] = "/media/scripts/gpio.sh 0xC"; // enable motor and lidar
 	system(GPIO_init);
 	printf("------> Power enabled\n");
 

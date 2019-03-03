@@ -102,8 +102,7 @@ void parse_and_send_command(char* command, int fd)
 		{
 			if (command[1]=='S')
 			{
-				char rotate_command[] =
-						"/media/scripts/start_pwm0.sh  560";	// 560 ~ equal to zero position
+				char rotate_command[50];
 
 				int rotate_step = 0;							// rotate_step = degrees between planes
 				int plane_points = 0;							// number of points per plane
@@ -121,7 +120,6 @@ void parse_and_send_command(char* command, int fd)
 
 				FILE *fp;
 
-				system(rotate_command);							// set zero position
 				if (strlen(command) > 3){
 					int size = 0;
 					int i = 2;
@@ -179,7 +177,6 @@ void parse_and_send_command(char* command, int fd)
 				float KMTZ_step_rad = (rotate_step)*(PI/180);   // angle between planes, in radians
 									  	  	  	  	  	  	  	// KMTZ_step means degree to rotate all complex
 				send_command(DS, fd);
-				printf("asdadsad\n");
 				fp = fopen("cloud.ply", "w");					// make file with '.ply' header
 				fprintf(fp,
 							"ply\n"
@@ -247,18 +244,24 @@ void parse_and_send_command(char* command, int fd)
 								}
 							points_now++;
 						}
-																										// rotate all complex each step
-						int PWM_val = (step_now + 1) * (rotate_step * PWM_CONST) + 560;
-						sprintf(rotate_command, "/media/scripts/start_pwm0.sh %d", PWM_val);
+						// one step dev rotation
+						int step_val = 0;
+						
+						if((rotate_step % 2) == 0) {
+							step_val = floor(rotate_step * ONE_DEG_STEP);
+						} else {
+							step_val = ceil(rotate_step * ONE_DEG_STEP);
+						}
+
+
+						sprintf(rotate_command, "%s %d", LIDAR_APP, step_val);
 
 						system(rotate_command);
 						printf("%s\n", rotate_command);
 						usleep(PAUSE);
-
-
 					}
 
-					for(int i = 0; i < 500; i++) {
+					/*for(int i = 0; i < 500; i++) {
 						x_coord = 0;
 						y_coord = i;
 						z_coord = 0;
@@ -277,28 +280,12 @@ void parse_and_send_command(char* command, int fd)
 						y_coord = 0;
 						z_coord = i;
 						fprintf(fp, "%f %f %f 0 0 0\n", x_coord, y_coord, z_coord);   //black
-					}
-
+					}*/
 
 					fclose(fp);
 
-
-						printf("collisions: %d\n", collisions );
-
-						int return_counter = 2300;
-						while (return_counter > (560 + PWM_CONST))										// slowly return to zero position
-						{
-							sprintf(rotate_command, "/media/scripts/start_pwm0.sh %d", return_counter);
-							system(rotate_command);
-							return_counter -= (10 * PWM_CONST);
-							usleep(100000);
-						}
-						sprintf(rotate_command, "/media/scripts/start_pwm0.sh %d", 560);
-						system(rotate_command);
-						usleep(100000);
-
-						send_command(DX, fd);
-																										// continue to check for other commands
+					printf("collisions: %d\n", collisions );
+					send_command(DX, fd);
 			}
 			else if (command[1]=='X')
 			{
@@ -310,7 +297,6 @@ void parse_and_send_command(char* command, int fd)
 				printf("Wrong D'?' command\n");
 			}
 		}
-
 
 		else if (command[0]=='M')
 		{
