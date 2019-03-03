@@ -88,7 +88,9 @@ void send_command(char* XX, int fd)
 
 	else														// other commands are 3 bytes long
 	{
+		printf("write\n");
 		write(fd, XX, 3);
+		printf("read\n");
 		b_read = read(fd, answer, (sizeof(answer)-1));
 		answer[b_read] = 0;
 		printf("Read %d: %s", b_read, answer);
@@ -120,6 +122,8 @@ void parse_and_send_command(char* command, int fd)
 
 				FILE *fp;
 
+				printf("---\n");
+
 				if (strlen(command) > 3){
 					int size = 0;
 					int i = 2;
@@ -137,7 +141,7 @@ void parse_and_send_command(char* command, int fd)
 						}
 						temp_rotate_step[size + 1] = '\0';
 						rotate_step = atoi(temp_rotate_step);
-						printf("%d\n", rotate_step);
+						printf("ROTATE_STEP: %d\n", rotate_step);
 					}
 
 					int points_start = 0;
@@ -157,7 +161,7 @@ void parse_and_send_command(char* command, int fd)
 					}
 					temp_plane_points[size + 1] = '\0';
 					plane_points = atoi(temp_plane_points);
-					printf("%d\n", plane_points);
+					printf("PLANE_POINTS: %d\n", plane_points);
 				}
 				if (!(rotate_step && plane_points)) {
 					do {
@@ -172,11 +176,15 @@ void parse_and_send_command(char* command, int fd)
 				int steps = 360 / rotate_step; 				
 				if (steps < 36) PAUSE=100000;
 				if (steps < 18) PAUSE=1000000;
-				printf("%d\n", steps);
+				printf("STEPS: %d\n", steps);
+				printf("---\n");
 
 				float KMTZ_step_rad = (rotate_step)*(PI/180);   // angle between planes, in radians
 									  	  	  	  	  	  	  	// KMTZ_step means degree to rotate all complex
 				send_command(DS, fd);
+
+				printf("DS cmd\n");
+				
 				fp = fopen("cloud.ply", "w");					// make file with '.ply' header
 				fprintf(fp,
 							"ply\n"
@@ -247,17 +255,19 @@ void parse_and_send_command(char* command, int fd)
 						// one step dev rotation
 						int step_val = 0;
 						
-						if((rotate_step % 2) == 0) {
+						if((step_now % 2) == 0) {
 							step_val = floor(rotate_step * ONE_DEG_STEP);
 						} else {
 							step_val = ceil(rotate_step * ONE_DEG_STEP);
 						}
 
+						printf("STEP: %d, STEP_VAL: %d\n", step_now, step_val);
 
 						sprintf(rotate_command, "%s %d", LIDAR_APP, step_val);
 
 						system(rotate_command);
-						printf("%s\n", rotate_command);
+						tcflush(fd, TCIOFLUSH);
+
 						usleep(PAUSE);
 					}
 
@@ -285,6 +295,8 @@ void parse_and_send_command(char* command, int fd)
 					fclose(fp);
 
 					printf("collisions: %d\n", collisions );
+					
+					usleep(1000000);
 					send_command(DX, fd);
 			}
 			else if (command[1]=='X')
@@ -400,7 +412,7 @@ void parse_and_send_command(char* command, int fd)
 			close(fd);										// close UART
 			printf("PS1 closed\n");
 
-			system("/media/scripts/gpio.sh 8");				// turn power off
+			system(LIDAR_OFF);
 			printf("------> Power disabled\n");
 			exit(0);
 		}

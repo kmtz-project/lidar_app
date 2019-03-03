@@ -17,8 +17,11 @@ int main(int argc, char** argv)
 	if (argc > 1){
 		for (int i = 1; i < argc; i++){
 			printf("%s\n", argv[i]);
+			send_command("LR03\n", fd); // Sample rate = 1000 Hz
 			parse_and_send_command(argv[i], fd);
 		}
+		system(LIDAR_OFF);
+		printf("END SCAN!\n");
 	} else {
 		for(;;)
 		{
